@@ -1,3 +1,4 @@
+require 'scraperwiki'
 require 'rubygems'
 require 'mechanize'
 require 'nokogiri'
@@ -40,11 +41,11 @@ def search_for_new_applications(until_date=Date.today)
 end
 
 def update_stale_applications
-  unpopulated_applications = ScraperWiki.select("* from swdata WHERE date_scraped IS NULL")
+  unpopulated_applications = ScraperWiki.select("* from data WHERE date_scraped IS NULL")
   unpopulated_applications.each do |app|
     populate_application_details(app)
   end
-  current_applications = ScraperWiki.select("* from swdata WHERE date_validated > '#{(Date.today-60).strftime('%F')}' ORDER BY date_scraped LIMIT 500")
+  current_applications = ScraperWiki.select("* from data WHERE date_validated > '#{(Date.today-60).strftime('%F')}' ORDER BY date_scraped LIMIT 500")
   current_applications.each do |app|
     populate_application_details(app)
   end
